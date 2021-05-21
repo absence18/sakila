@@ -1,7 +1,6 @@
 package com.gd.sakila.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,17 +83,30 @@ public class BoardService {
 	public int removeBoard(Board board) {
 		log.debug("▶▶▶▶▶▶ removeBoard() param: "+ board.toString());
 		
-		// 2) 게시글삭제 FK를 지정하지 않은 경우
+		// 1) 게시글삭제 FK를 지정하지 않은 경우
 		int boardRow = boardMapper.deleteBoard(board);
 		if(boardRow == 0) {
 			return 0;
 		}
 		
-		// 1) 댓글삭제
+		// 2) 댓글삭제
 		int commentRow = commentMapper.deleteCommentByBoardId(board.getBoardId());
-		log.debug("▶▶▶▶▶▶ removeBoard() commentRow :"+commentRow);
 		
-		log.debug("▶▶▶▶▶▶ removeBoard() boardRow :"+boardRow);
+		
+		// 3) 물리적 파일 삭제 (/resource/안의 파일)
+		List<Boardfile> boardfileList = boardfileMapper.selectBoardfileByBoardId(board.getBoardId());
+		if(boardfileList != null) {
+			for(Boardfile f : boardfileList) {
+				File temp = new File(""); // 프로젝트 위치(프로젝트 폴더)에 빈 파일이 만들어짐.
+				String path = temp.getAbsolutePath(); // 프로젝트 폴다
+				File file = new File(path + "\\src\\main\\webapp\\resource\\" + f.getBoardfileName());
+				file.delete();
+			}
+		}
+		
+		// 4) 파일 테이블 행 삭제
+		int boardfileRow = boardfileMapper.deleteBoardfileByBoardId(board.getBoardId());
+		
 		return boardRow;
 	}
 	
