@@ -65,7 +65,10 @@ public class BoardService {
 				// 2-2)
 				// 파일을 저장..
 				try {
-					f.transferTo(new File("D:\\upload\\" + filename));
+					File temp = new File(""); // 프로젝트 위치(프로젝트 폴더)에 빈 파일이 만들어짐.
+					String path = temp.getAbsolutePath(); // 프로젝트 폴다
+					
+					f.transferTo(new File(path + "\\src\\main\\webapp\\resource\\" + filename));
 				} catch (Exception e) {
 					throw new RuntimeException();
 					
@@ -114,12 +117,17 @@ public class BoardService {
 		// 1) 상세보기
 		Map<String, Object> boardMap = boardMapper.selectBoardOne(boardId);
 		log.debug("▶▶▶▶▶▶ boardMap :"+boardMap);
-		// 2) 댓글 목록
+		
+		// 2) boardfile 목록
+		List<Boardfile> boardfileList = boardfileMapper.selectBoardfileByBoardId(boardId);
+		
+		// 3) 댓글 목록
 		List<Comment> commentList = commentMapper.selectCommentListByBoard(boardId);
 		log.debug("▶▶▶▶▶▶ commentList size() :"+commentList.size());
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("boardMap", boardMap);
+		map.put("boardfileList", boardfileList);
 		map.put("commentList", commentList);
 		
 		return map;

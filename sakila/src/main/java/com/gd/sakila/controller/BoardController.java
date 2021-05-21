@@ -70,6 +70,7 @@ public class BoardController {
 	      log.debug(" map : "+map);
 	      
 	      model.addAttribute("boardMap", map.get("boardMap"));
+	      model.addAttribute("boardfileList", map.get("boardfileList"));
 	      model.addAttribute("commentList", map.get("commentList"));
 	      return "getBoardOne";
 	   }
