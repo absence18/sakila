@@ -1,13 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+	pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>BOARD VIEW(spring mvc ë°©ì‹)</title>
-<!-- bootstrapì„ ì‚¬ìš©í•˜ê¸° ìœ„í•œ CDNì£¼ì†Œ -->
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>BoardOne</title>
+<!-- bootstrapÀ» »ç¿ëÇÏ±â À§ÇÑ CDNÁÖ¼Ò -->
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -18,99 +17,118 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 	crossorigin="anonymous">
-<!-- jqueryë¥¼ ì‚¬ìš©í•˜ê¸°ìœ„í•œ CDNì£¼ì†Œ -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 	crossorigin="anonymous"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+	    console.log("document ready!");
+	    $('#addButton').click(function(){
+	       console.log("btn click!");
+	       if($('#username').val().length < 3) {
+	    	   alert('username´Â 3ÀÚÀÌ»ó ÀÌ¾î¾ß ÇÕ´Ï´Ù');
+               $('#username').focus();
+	       } else if ($('#commentContent').val().length < 5){
+	    	   alert('commentContent´Â 5ÀÚÀÌ»ó ÀÌ¾î¾ß ÇÕ´Ï´Ù');
+               $('#commentContent').focus();
+	       } else {
+	    	   $('#addCommentForm').submit();
+	       }
+	       
+	    });
+	 });
+</script>
 </head>
 <body>
 	<div class="container">
-		<h1>BOARD VIEW</h1>
-
+		<h1>BoardOne</h1>
 		<table class="table">
 			<tbody>
 				<tr>
-					<td>board Id</td>
+					<td>board_id :</td>
 					<td>${boardMap.boardId}</td>
 				</tr>
 				<tr>
-					<td>board Title</td>
+					<td>board_title :</td>
 					<td>${boardMap.boardTitle}</td>
 				</tr>
 				<tr>
-					<td>board Content</td>
+					<td>board_content :</td>
 					<td>${boardMap.boardContent}</td>
 				</tr>
 				<tr>
-					<td>user Name</td>
-					<td>${boardMap.username}</td>
+					<td>user_name :</td>
+					<td>${boardMap.userName}</td>
 				</tr>
 				<tr>
-					<td>board file</td>
+					<td>insert_date :</td>
+					<td>${boardMap.insertDate}</td>
+				</tr>
+				<tr>
+					<td>BoardFile :</td>
 					<td>
 						<div>
+							<!-- ÆÄÀÏ Ãß°¡ -->
 							<a
 								href="${pageContext.request.contextPath}/admin/addBoardfile?boardId=${boardMap.boardId}"><button
-									class="btn btn-default btn-sm" type="button">íŒŒì¼ì¶”ê°€</button></a>
-						</div> <!-- ë³´ë“œíŒŒì¼ ì¶œë ¥í•˜ëŠ” ë°˜ë³µë¬¸ ì½”ë“œ êµ¬í˜„ --> <c:forEach var="f"
+									type="button">ÆÄÀÏÃß°¡</button></a>
+						</div> <!-- ¹İº¹¹®(º¸µåÆÄÀÏÀ» Ãâ·ÂÇÏ´Â ¹İº¹¹® ÄÚµå ±¸Çö) --> <c:forEach var="f"
 							items="${boardfileList}">
 							<div>
 								<a
 									href="${pageContext.request.contextPath}/resource/${f.boardfileName}">${f.boardfileName}</a>
+
+								<!-- ÆÄÀÏ »èÁ¦ -->
 								<a
 									href="${pageContext.request.contextPath}/admin/removeBoardfile?boardfileId=${f.boardfileId}&boardId=${f.boardId}&boardfileName=${f.boardfileName}">
-									<button type="button">íŒŒì¼ì‚­ì œ</button>
+									<button type="button">ÆÄÀÏ»èÁ¦</button>
 								</a>
 							</div>
 						</c:forEach>
 					</td>
 				</tr>
-				<tr>
-					<td>insert Date</td>
-					<td>${boardMap.insertDate}</td>
-				</tr>
 			</tbody>
 		</table>
-		<a class="btn btn-default"
-			href="${pageContext.request.contextPath}/admin/modifyBoard?boardId=${boardMap.boardId}">ìˆ˜ì •</a>
-		<a class="btn btn-default"
-			href="${pageContext.request.contextPath}/admin/removeBoard?boardId=${boardMap.boardId}">ì‚­ì œ</a>
-		<a class="btn btn-default"
-			href="${pageContext.request.contextPath}/admin/getBoardList">ëª©ë¡</a> <br>
 		<br>
+		<!-- ÀüÃ¼ ¼öÁ¤½Ã ÆÄÀÏ ¼öÁ¤ x -->
+		<a class="btn btn-default"
+			href="${pageContext.request.contextPath}/admin/modifyBoard?boardId=${boardMap.boardId}">¼öÁ¤</a>
+		<!-- ÀüÃ¼ »èÁ¦½Ã ÆÄÀÏ »èÁ¦ o(¸¸µé¾î¾ßÇÔ) -->
+		<a class="btn btn-default"
+			href="${pageContext.request.contextPath}/admin/removeBoard?boardId=${boardMap.boardId}">»èÁ¦</a>
+		<a class="btn btn-default"
+			href="${pageContext.request.contextPath}/admin/getBoardList">±Û¸ñ·Ï</a>
 		<br>
-
-		<h4>ëŒ“ê¸€ ëª©ë¡</h4>
-		<!-- ëŒ“ê¸€ ëª©ë¡ -->
+		<!-- ´ñ±Û ¸ñ·Ï -->
 		<div>
-			<!-- ëŒ“ê¸€ ì¶”ê°€ -->
-			<form id="commentForm"
-				action="${pageContext.request.contextPath}/admin/addComment"
-				method="post">
+			<form id="addCommentForm"
+				action="${pageContext.request.contextPath}/admin/addComment">
 				<input type="hidden" name="boardId" value="${boardMap.boardId}">
-				<input id="username" type="text" name="username"
-					placeholder="username">
-				<div>
-					<textarea id="addComment" name="commentContent" rows="5" cols="130"></textarea>
-				</div>
-				<button class="btn btn-default btn-sm" id="btn" type="submit">ëŒ“ê¸€
-					ì…ë ¥</button>
+				<table>
+					<tr>
+						<td>username : <input type="text" name="username"
+							id="username"></td>
+
+						<td>commentContent : <textarea name="commentContent"
+								id="commentContent" rows="3" cols="100"></textarea></td>
+					</tr>
+				</table>
+				<a><input class="btn btn-default" id="addButton" type="button"
+					value="´ñ±ÛÀÔ·Â"></a>
 			</form>
-			<!-- end -->
 			<table class="table">
 				<c:forEach var="c" items="${commentList}">
 					<tr>
 						<td>${c.commentContent}</td>
 						<td>${c.username}</td>
-						<td>${c.insertDate.substring(0,10)}</td>
+						<td>${c.insertDate}</td>
 						<td><a
-							href="${pageContext.request.contextPath}/admin/removeComment?boardId=${boardMap.boardId}&commentId=${c.commentId}">
-								<button class="btn btn-default btn-sm" type="button">ì‚­ì œ</button>
-						</a></td>
+							href="${pageContext.request.contextPath}/admin/deleteCommentByCommentId?commentId=${c.commentId}&boardId=${boardMap.boardId}"><button
+									class="btn btn-default" type="button">»èÁ¦</button></a></td>
 					</tr>
 				</c:forEach>
 			</table>

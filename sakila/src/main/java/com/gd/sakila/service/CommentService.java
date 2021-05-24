@@ -9,29 +9,27 @@ import com.gd.sakila.vo.Comment;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j 
 @Service
-@Slf4j
-@Transactional
+@Transactional 
 public class CommentService {
-	@Autowired
-	CommentMapper commentMapper;
-	//관리자 게시판 댓글 삭제
-	public int removeComment(int commentId) {
-		log.debug("▶▶▶▶▶▶ removeCommetByCommentId() param: "+ commentId);
+	@Autowired private CommentMapper commentMapper;
+	
+	// 댓글 추가입력 매소드
+	public int addComment(Comment comment) {
 		
-		int row = commentMapper.deleteCommentByCommentId(commentId);
-		log.debug("▶▶▶▶▶▶ removeCommetByCommentId() row: " + row);
+		// 디버깅
+		log.debug("CommentService -> addComment에서 comment : " + comment.toString());
 		
-		return row;
+		return commentMapper.insertComment(comment);
 	}
 	
-	//관리자 게시판 댓글 입력
-	public int addComment(Comment comment) {
-		log.debug("▶▶▶▶▶▶ addComment() param: "+ comment.toString());
+	// 댓글 삭제 매소드(하나씩)
+	public int deleteCommentByCommentId(int commentId) {
 		
-		int row = commentMapper.insertComment(comment);
-		log.debug("▶▶▶▶▶▶ addComment() row: " + row);
+		// 디버깅
+		log.debug("CommentService -> deleteCommentByCommentId에서 commentId : " + commentId);
 		
-		return row;
+		return commentMapper.deleteCommentByCommentId(commentId);
 	}
 }

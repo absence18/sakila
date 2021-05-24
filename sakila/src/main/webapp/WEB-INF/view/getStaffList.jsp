@@ -1,67 +1,86 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>STAFF LIST</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>getBoardList</title>
 <!-- bootstrap을 사용하기 위한 CDN주소 -->
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous">
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="container">
-	<h1>STAFF LIST</h1>
-	<!-- 검색어 입력창 -->
-    <form action="/admin/getStaffList" method="get">
-        <label for="searchWord">검색어(제목) :</label> 
-        <input name="searchWord" type="text">
-        <button type="submit">검색</button>
-    </form>
-	<table  class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>name</th>
-                <th>Address</th>
-                <th>zip code</th>
-                <th>phone</th>
-                <th>city</th>
-                <th>country</th>
-                <th>SID</th>
-            </tr>
-        </thead>
-        <tbody>
-        	<c:forEach var="s" items="${staffList}">
-        		<tr>
-        			<td>${s.ID}</td>
-        			<td>${s.name}</td>
-        			<td>${s.address}</td>
-        			<td>${s.zipCode}</td>
-        			<td>${s.phone}</td>
-        			<td>${s.city}</td>
-        			<td>${s.country}</td>
-        			<td>${s.SID}</td>
-        		</tr>
-        	</c:forEach>
-        </tbody>
-	</table>
-	<div>
-		<a class="btn btn-default" href="${pageContext.request.contextPath}/home">돌아가기</a>
+	<div class="container">
+		<h2>StaffList</h2>
+		<ul>
+			<li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+			<li><a
+				href="${pageContext.request.contextPath}/admin/getBoardList">BoardList</a></li>
+			<li><a
+				href="${pageContext.request.contextPath}/admin/getStaffList">StaffList</a></li>
+		</ul>
+		<br>
+
+		<!-- 검색어 -->
+		<div align="right">
+			<form action="/admin/getStaffList" method="get">
+				<label for="searchWord">검색어 :</label> <input name="searchWord"
+					type="text" placeholder="name">
+				<button type="submit">검색</button>
+			</form>
+		</div>
+
+		<!-- 리스트 -->
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>name</th>
+					<th>address</th>
+					<th>city</th>
+					<th>country</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="s" items="${staffList}">
+					<tr>
+						<td>${s.ID}</td>
+						<td><a
+							href="${pageContext.request.contextPath}/admin/getStaffOne?ID=${s.ID}">${s.name}</a></td>
+						<td>${s.address}</td>
+						<td>${s.city}</td>
+						<td>${s.country}</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+
+		<!-- 페이징 -->
+		<ul class="pager">
+			<c:if test="${currentPage > 1}">
+				<li class="previous"><a
+					href="${pageContext.request.contextPath}/admin/getStaffList?currentPage=${currentPage-1}&searchWord=${searchWord}">이전</a></li>
+			</c:if>
+			<c:if test="${currentPage < lastPage}">
+				<li class="next"><a
+					href="${pageContext.request.contextPath}/admin/getStaffList?currentPage=${currentPage+1}&searchWord=${searchWord}">다음</a></li>
+			</c:if>
+		</ul>
+
 	</div>
-	<ul class="pager">
-        <c:if test="${currentPage > 1}">
-            <li class="previous"><a href="${pageContext.request.contextPath}/admin/getStaffList?currentPage=${currentPage-1}&searchWord=${searchWord}">이전</a></li>
-        </c:if>
-        <c:if test="${currentPage < lastPage}">
-            <li class="next"><a href="${pageContext.request.contextPath}/admin/getStaffList?currentPage=${currentPage+1}&searchWord=${searchWord}">다음</a></li>
-        </c:if>
-    </ul>
-</div>	
 </body>
 </html>

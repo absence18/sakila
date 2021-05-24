@@ -8,10 +8,8 @@ import com.gd.sakila.vo.Boardfile;
 
 @Mapper
 public interface BoardfileMapper {
-	
 	int deleteBoardfileOne(int boardfileId);
-	int deleteBoardfileByBoardId(int boardfile);
+	int deleteBoardfileByBoardId(int boardId);
 	int insertBoardfile(Boardfile boardfile);
 	List<Boardfile> selectBoardfileByBoardId(int boardId);
-
 }

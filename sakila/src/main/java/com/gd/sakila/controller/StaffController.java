@@ -1,8 +1,6 @@
 package com.gd.sakila.controller;
 
-
-
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gd.sakila.service.StaffService;
-import com.gd.sakila.vo.StaffList;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,25 +17,32 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/admin")
 public class StaffController {
-	@Autowired StaffService staffService;
+	@Autowired
+	StaffService staffService;
 
 	@GetMapping("/getStaffList")
-	public String getStaffList(Model model,
-							   @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-							   @RequestParam(value = "rowPerPage", defaultValue = "10") int rowPerPage,
-							   @RequestParam(value = "searchWord", required = false) String searchWord) {
-		log.debug("▶▶▶▶▶▶▶▶▶▶▶ getStaffList() currentPage : "+currentPage);
-		log.debug("▶▶▶▶▶▶▶▶▶▶▶ getStaffList() rowPerPage : "+rowPerPage);
-		log.debug("▶▶▶▶▶▶▶▶▶▶▶ getStaffList() searchWord : "+searchWord);
+	public String getStaffList(Model model, @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+			@RequestParam(value = "rowPerPage", defaultValue = "10") int rowPerPage,
+			@RequestParam(value = "searchWord", required = false) String searchWord) {
+		log.debug("currentPage : " + currentPage);
+		log.debug("rowPerPage : " + rowPerPage);
+		log.debug("searchWord : " + searchWord);
 
-		List<StaffList> staffList = staffService.getStaffList(currentPage, rowPerPage, searchWord);
-		log.debug("▶▶▶▶▶▶▶▶▶▶▶ getStaffList() staffList : "+staffList.toString());
-
+		Map<String, Object> map = staffService.getStaffList(currentPage, rowPerPage, searchWord);
 		model.addAttribute("currentPage", currentPage);
-		// model.addAttribute("lastPage", map.get("lastPage")); 아직 가공하지 않은상태
-		model.addAttribute("searchWord", searchWord);
-		model.addAttribute("staffList", staffList);
+		model.addAttribute("staffList", map.get("staffList"));
 
 		return "getStaffList";
 	}
+
+	@GetMapping("/getStaffOne")
+	public String getStaffOne(Model model, @RequestParam(value = "ID", required = true) int ID) {
+		log.debug("ID : " + ID);
+		Map<String, Object> staffMap = staffService.getStaffOne(ID);
+		log.debug("staffMap :" + staffMap);
+		model.addAttribute("staffMap", staffMap);
+
+		return "getStaffOne";
+	}
+
 }

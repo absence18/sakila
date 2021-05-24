@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class Staff {
-	
 	private int staffId;
 	private String firstName;
 	private String lastName;
@@ -16,5 +15,4 @@ public class Staff {
 	private String username;
 	private String password;
 	private String lastUpdate;
-
 }
