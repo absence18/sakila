@@ -38,7 +38,7 @@ public class BoardService {
 	}
 	// 삭제 액션
 		public int removeBoard(Board board) {
-			log.debug("▶▶▶▶▶▶ removeBoard() param: "+ board);
+			log.debug("★★★★★★★ removeBoard() param: "+ board);
 			
 			// 1) 게시글삭제 FK를 지정하지 않은 경우
 			int boardRow = boardMapper.deleteBoard(board);
@@ -68,13 +68,13 @@ public class BoardService {
 		}	
 	//추가액션
 	public void addBoard(BoardForm boardForm) {
-		log.debug("BoardService▶▶▶▶▶▶ parm boardForm: "+boardForm);
+		log.debug("BoardService ★★★★★★★ parm boardForm: "+boardForm);
 		//boardForm --> board, boardfile
 		//1.
 		Board board = boardForm.getBoard();
-		log.debug("BoardService▶▶▶▶▶▶ board: "+board);
+		log.debug("BoardService ★★★★★★★ board: "+board);
 		boardMapper.insertBoard(board); //입력시 만들어진 키값을 리턴받아야한다. 근데 리턴 받을순 없으니까 전달해준 매개변수(참조값)에 데이터 추가
-		log.debug("BoardService▶▶▶▶▶▶ board: "+board); //boardId 값 추가됨.
+		log.debug("BoardService ★★★★★★★ board: "+board); //boardId 값 추가됨.
 		
 		//2.
 		List<MultipartFile> list = boardForm.getBoardfile();
@@ -84,7 +84,7 @@ public class BoardService {
 				boardfile.setBoardId(board.getBoardId());
 				//test.txt -> (newname).txt 확장자는 유지돼야함.
 				String originalFileName = f.getOriginalFilename();
-				log.debug("BoardService▶▶▶▶▶▶ originalFileName:" + originalFileName);
+				log.debug("BoardService ★★★★★★★ originalFileName:" + originalFileName);
 				int p = originalFileName.lastIndexOf(".");
 				String ext = originalFileName.substring(p).toLowerCase();
 				String prename = UUID.randomUUID().toString().replace("-", "");
@@ -93,7 +93,7 @@ public class BoardService {
 				boardfile.setBoardfileSize(f.getSize());
 				boardfile.setBoardfileType(f.getContentType());
 				
-				log.debug("BoardService▶▶▶▶▶▶ boardFile:" + boardfile);
+				log.debug("BoardService ★★★★★★★ boardFile:" + boardfile);
 				boardfileMapper.insertBoardfile(boardfile);
 				
 				//파일을 저장
@@ -137,8 +137,12 @@ public class BoardService {
 		Page page = new Page();
 		page.setBeginRow((currentPage-1)*rowPerPage);
 		page.setRowPerPage(rowPerPage);
-		page.setSearchWord(searchWord);
-		List<Board> boardList = boardMapper.selectBoardList(page); // Page
+		
+		Map<String, Object> parmMap = new HashMap<String, Object>();
+		parmMap.put("page", page);
+		parmMap.put("searchWord", searchWord);
+
+		List<Board> boardList = boardMapper.selectBoardList(parmMap); // Page
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("lastPage", lastPage);

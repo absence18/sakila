@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gd.sakila.mapper.BoardMapper">
 	
-	<select id="selectBoardList" resultType="com.gd.sakila.vo.Board" parameterType="com.gd.sakila.vo.Page">
+	<select id="selectBoardList" resultType="com.gd.sakila.vo.Board" parameterType="java.util.Map">
 		SELECT
 			board_id boardId,
 			board_title boardTitle,
@@ -15,7 +15,7 @@
 			</if>
 		</where>
 		ORDER BY insert_date DESC
-		LIMIT #{beginRow}, #{rowPerPage}
+		LIMIT #{page.beginRow}, #{page.rowPerPage}
 	</select>
 	
 	<select id="selectBoardTotal" resultType="Integer" parameterType="String">
