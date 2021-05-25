@@ -10,7 +10,7 @@ public class Staff {
 	private int addressId;
 	private String picture;
 	private String email;
-	private int storeId;
+	private int storeId; //SID
 	private int active;
 	private String username;
 	private String password;

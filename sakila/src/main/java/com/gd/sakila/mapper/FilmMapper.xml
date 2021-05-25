@@ -1,17 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gd.sakila.mapper.FilmMapper">
+	<select id="selectFilmList" parameterType="com.gd.sakila.vo.Page" resultType="com.gd.sakila.vo.FilmView">
+		SELECT 
+		   f.film_id FID, 
+		   f.title title,
+		   c.name category,
+		   GROUP_CONCAT(CONCAT(actor.first_name, _utf8mb4' ', actor.last_name) SEPARATOR ', ') AS actors,
+		   f.description description, 
+		   f.release_year releaseYear, 
+		   f.language_id languageId,
+		   f.rental_duration rentalDuration, 
+		   f.rental_rate price, 
+		   f.length LENGTH, 
+		   f.replacement_cost replacementCost, 
+		   f.rating rating, 
+		   f.special_features specialFeatures, 
+		   f.last_update lastUpdate
+		FROM film f 
+		   LEFT JOIN film_category fc ON f.film_id = fc.film_id
+		   LEFT JOIN category c ON fc.category_id = c.category_id
+		   LEFT OUTER JOIN film_actor ON f.film_id = film_actor.film_id
+		   LEFT OUTER JOIN actor ON film_actor.actor_id = actor.actor_id
+		GROUP BY f.film_id
+		
+		<if test="category != null and rating != null and searchWord != null">
+			<if test = "rating == ''">
+				having c.name = #{category} AND title LIKE CONCAT('%',#{searchWord},'%')
+			</if>
+			<!-- 제목검색과 배우검색을 분리해야됨. -->
+			<if test = "rating != ''">
+				having c.name = #{category} AND rating = #{rating} AND title LIKE CONCAT('%',#{searchWord},'%')
+			</if>
+		</if>
+		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+	
+	<!-- 매개변수로 페이지 전달 -->
+	
+	<select id="selectFilmTotal" parameterType="com.gd.sakila.vo.Page" resultType="int">
+		SELECT 
+			DISTINCT COUNT(*) OVER()
+		FROM
+			film f
+			LEFT JOIN film_category fc ON f.film_id = fc.film_id
+		    LEFT JOIN category c ON fc.category_id = c.category_id
+		    LEFT OUTER JOIN film_actor ON f.film_id = film_actor.film_id
+		    LEFT OUTER JOIN actor ON film_actor.actor_id = actor.actor_id
+		    <where>
+		    	<if test="category != null and rating != null and searchWord != null">
+					<if test = "rating == ''">
+						AND c.name = #{category} AND f.title LIKE CONCAT('%',#{searchWord},'%')
+					</if>
+					<!-- 제목검색과 배우검색을 분리해야됨. -->
+					<if test = "rating != ''">
+						AND c.name = #{category} AND f.rating = #{rating} AND f.title LIKE CONCAT('%',#{searchWord},'%')
+					</if>
+				</if>
+		    </where>
+		GROUP BY f.film_id
+		
+	</select>
 	<!-- Map : filmId(in), storeId(in), filmCount(out) -->
-	<select id="selectFilmInStock" 
-			parameterType="java.util.Map" 
-			resultType="int"
-			statementType="CALLABLE">
-		{
-			call film_in_stock(
-				#{filmId},
-				#{storeId},
-				#{filmCount, mode=OUT, jdbcType=DECIMAL, javaType=Integer}
-			)
-		}
-	</select>	
+	<select id="selectFilmInStock" parameterType="java.util.Map" resultType="int" statementType="CALLABLE">
+      {
+         call film_in_stock(
+            #{filmId},
+            #{storeId},
+            #{filmCount, mode=OUT, jdbcType=DECIMAL, javaType=Integer}
+         )
+      }
+   </select>
+	<select id="selectFilmOne" parameterType="int" resultType="java.util.Map">
+		SELECT
+			film_id filmId,
+			title title,
+			description description,
+			release_year releaseYear,
+			language_id languageId,
+			original_language_id originalLaguageId,
+			rental_duration rentalDuration,
+			rental_rate rentalRate,
+			length length,
+			replacement_cost replacementCost,
+			rating rating,
+			special_features specialFeatures,
+			last_update lastUpdate
+		FROM
+			film
+		WHERE
+			film_id = #{filmId}
+	</select>
+	<select id="selectCategoryList" resultType="string">
+		SELECT
+			name
+		FROM
+			category
+	</select>
+	
+	<select id="selectRatingList" resultType="string">
+		SELECT DISTINCT
+			rating
+		FROM
+			film
+	</select>
 </mapper>

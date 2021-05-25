@@ -1,3 +1,4 @@
+
 package com.gd.sakila.vo;
 
 import lombok.Data;
@@ -6,5 +7,4 @@ import lombok.Data;
 public class PageParam {
 	private int rowPerPage;
 	private int beginRow;
-	private String searchWord;
 }

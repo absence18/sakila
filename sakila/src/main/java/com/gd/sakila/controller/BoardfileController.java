@@ -18,31 +18,26 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/admin")
 public class BoardfileController {
-	@Autowired
-	BoardfileService boardfileService;
-
-	// 파일 하나씩 입력 폼
+	@Autowired BoardfileService boardfileService;
+	
 	@GetMapping("/addBoardfile")
 	public String addBoardfile(Model model, @RequestParam(value = "boardId", required = true) int boardId) {
 		model.addAttribute("boardId", boardId);
 		return "addBoardfile";
 	}
-
-	// 파일 하나씩 입력 액션
 	@PostMapping("/addBoardfile")
 	public String addBoard(MultipartFile multipartFile, @RequestParam(value = "boardId", required = true) int boardId) {
-		log.debug("%%%%%%%%%%%%%%%%% boardId : " + boardId);
-		log.debug("%%%%%%%%%%%%%%%%% multipartFile" + multipartFile);
+		log.debug("♣♣♣♣♣♣♣♣♣♣ boardId :"+boardId);
+		log.debug("♣♣♣♣♣♣♣♣♣♣ multipartFile :"+multipartFile);
 		boardfileService.addBoardfile(multipartFile, boardId);
-		// 입력 성공할 경우
-		return "redirect:/admin/getBoardOne?boardId=" + boardId;
+		return "redirect:/admin/getBoardOne?boardId="+boardId;
 	}
-
-	// boardfile 삭제 (하나씩)
-	@GetMapping("/removeBoardfile") // 앞에 /admin안 적으려고 @RequestMapping("/admin") 사용
+	
+	
+	@GetMapping("/removeBoardfile")
 	public String removeBoardfile(Boardfile boardfile) {
-		// 아무나(글쓴이가 아니라도) 삭제 가능
+		// 글쓴이가 아니라도 삭제가 가능하다
 		boardfileService.removeBoardfileOne(boardfile);
-		return "redirect:/admin/getBoardOne?boardId=" + boardfile.getBoardId();
+		return "redirect:/admin/getBoardOne?boardId="+boardfile.getBoardId();
 	}
 }

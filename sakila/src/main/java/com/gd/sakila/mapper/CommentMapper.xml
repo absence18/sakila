@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gd.sakila.mapper.CommentMapper">
-
-	<!-- 다 삭제 --> <!-- board delete호출과 같이 transaction -->
-	<delete id="deleteCommentByBoardId" parameterType="Integer">
+	<!-- transaction -->
+	<delete id = "deleteCommentByBoardId"
+			parameterType="Integer">
 		DELETE FROM comment
 		WHERE board_id = #{boardId}
 	</delete>
 	
-	
-	<!-- 하나만 삭제 -->
-	<delete id="deleteCommentByCommentId" parameterType="Integer">
+	<delete id = "deleteCommentByCommentId"
+			parameterType="Integer">
 		DELETE FROM comment
 		WHERE comment_id = #{commentId}
 	</delete>
-
 	
 	<insert id="insertComment" parameterType="com.gd.sakila.vo.Comment">
-		INSERT INTO comment (
+		INSERT INTO comment(
 			board_id,
 			username,
 			comment_content,
@@ -29,9 +27,10 @@
 			NOW()
 		)
 	</insert>
-
-
-	<select id="selectCommentListByBoard" parameterType="Integer" resultType="com.gd.sakila.vo.Comment">
+	
+	<select id="selectCommentListByBoard" 
+			parameterType="Integer"
+			resultType="com.gd.sakila.vo.Comment">
 		SELECT 
 			comment_id commentId,
 			board_id boardId,
@@ -40,6 +39,6 @@
 			insert_date insertDate
 		FROM comment
 		WHERE board_id = #{boardId}
-		ORDER BY insert_date DESC
+        ORDER BY insert_date DESC
 	</select>
 </mapper>

@@ -12,12 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 public class CustomerService {
-   @Autowired 
-   CustomerMapper customerMapper;
-   
-   public void modifyCustomerActiveByScheduler() {
-      log.debug("▶▶▶▶▶▶▶ modifyCustomerActiveByScheduler() 실행");
-      int row = customerMapper.updateCustomerActiveByScheduler();
-      log.debug("▶▶▶▶▶▶▶ modifyCustomerActiveByScheduler() 휴면고객 처리 행 수 : " + row);
-   }
+	@Autowired CustomerMapper customerMapper;
+	public void modifyCustomerActiveByscheduler() {
+		log.debug("▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶ CustomerService.modifyCustomerActiveByscheduler() 실행");
+		int row = customerMapper.updateCustomerActiveByscheduler();
+		log.debug("▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶ 휴먼고객 처리 행수 :" +row);
+	}
 }

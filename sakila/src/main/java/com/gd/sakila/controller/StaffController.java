@@ -1,5 +1,6 @@
 package com.gd.sakila.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gd.sakila.service.StaffService;
+import com.gd.sakila.vo.StaffView;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,32 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/admin")
 public class StaffController {
-	@Autowired
-	StaffService staffService;
-
+	@Autowired StaffService staffService;
+	
 	@GetMapping("/getStaffList")
-	public String getStaffList(Model model, @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
-			@RequestParam(value = "rowPerPage", defaultValue = "10") int rowPerPage,
-			@RequestParam(value = "searchWord", required = false) String searchWord) {
-		log.debug("currentPage : " + currentPage);
-		log.debug("rowPerPage : " + rowPerPage);
-		log.debug("searchWord : " + searchWord);
-
-		Map<String, Object> map = staffService.getStaffList(currentPage, rowPerPage, searchWord);
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("staffList", map.get("staffList"));
-
+	public String getStaffViewList(Model model) {
+		List<StaffView> staffViewList = staffService.getStaffViewList();
+		log.debug("StaffController.getStaffViewList ▶▶▶▶▶▶ staffViewList :"+ staffViewList);
+		model.addAttribute("staffViewList",staffViewList);
 		return "getStaffList";
 	}
-
-	@GetMapping("/getStaffOne")
-	public String getStaffOne(Model model, @RequestParam(value = "ID", required = true) int ID) {
-		log.debug("ID : " + ID);
-		Map<String, Object> staffMap = staffService.getStaffOne(ID);
-		log.debug("staffMap :" + staffMap);
-		model.addAttribute("staffMap", staffMap);
-
-		return "getStaffOne";
-	}
-
 }
