@@ -19,6 +19,8 @@
 	<a href="${pageContext.request.contextPath}/admin/getBoardList">게시판</a>
 	<a href="${pageContext.request.contextPath}/admin/getStaffList">직원목록</a>
 	<a href="${pageContext.request.contextPath}/admin/getFilmList">영화목록</a>
+	<a href="${pageContext.request.contextPath}/admin/getActorList">배우목록</a>
+	
 	<table class="table table-striped">
         <thead>
             <tr>
