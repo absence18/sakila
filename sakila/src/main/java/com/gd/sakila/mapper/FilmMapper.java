@@ -7,10 +7,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.gd.sakila.vo.Film;
 import com.gd.sakila.vo.FilmView;
-import com.gd.sakila.vo.Page;
 
 @Mapper
 public interface FilmMapper {
+	
+	int insertFilmCategory(Map map);
+	int insertFilm(Film film);
+	
 	List<FilmView> selectFilmList(Map<String, Object> map);
 	int selectFilmTotal(Map<String, Object> map);
 	List<Integer> selectFilmInStock(Map<String, Object> map);

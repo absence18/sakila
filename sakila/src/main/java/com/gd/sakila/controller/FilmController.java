@@ -23,6 +23,7 @@ public class FilmController {
 	@Autowired FilmService filmService;
 	@GetMapping("/getFilmList")
 	public String getFilmList(Model model,
+			
 							@RequestParam(value="currentPage", defaultValue = "1") int currentPage,
 							@RequestParam(value="rowPerPage", defaultValue = "10") int rowPerPage,
 							@RequestParam(value="searchWord", required = false ) String searchWord,

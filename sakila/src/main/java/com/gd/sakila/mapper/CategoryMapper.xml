@@ -3,6 +3,7 @@
 <mapper namespace="com.gd.sakila.mapper.CategoryMapper">
 	<select id="selectCategoryList" resultType="string">
 		SELECT
+			category_id categoryrId,
 			name
 		FROM
 			category

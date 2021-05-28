@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Film {
+	
 	private int filmId;
 	private String title;
 	private String description;
@@ -13,10 +14,10 @@ public class Film {
 	private int rentalDuration;
 	private double rentalRate;
 	private int length;
-	private double replacementCost;
-	private enum rating {
-		G,PG,PG_13,R,NC_17 
-	}
-	private String[] specialFeatures = {"Trailers","Commentaries","Deleted Scenes","Behind the Scenes"};
+	private int replacementCost;
+
+	private String rating;
+
+	private String[] specialFeatures = { "Trailers", "Commentaries", "Deleted Scenes", "Behind the Scenes" };
 	private String lastUpdate;
 }

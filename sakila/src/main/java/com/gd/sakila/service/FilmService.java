@@ -10,9 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gd.sakila.mapper.CategoryMapper;
 import com.gd.sakila.mapper.FilmMapper;
-import com.gd.sakila.mapper.RentalRateMapper;
 import com.gd.sakila.mapper.RatingMapper;
+import com.gd.sakila.mapper.RentalRateMapper;
 import com.gd.sakila.vo.Film;
+import com.gd.sakila.vo.FilmForm;
 import com.gd.sakila.vo.FilmView;
 import com.gd.sakila.vo.Page;
 
@@ -26,6 +27,21 @@ public class FilmService {
 	@Autowired CategoryMapper categoryMapper;
 	@Autowired RatingMapper ratingMapper;
 	@Autowired RentalRateMapper rentalRateMapper;
+	
+	/*
+	 * param : film 입력폼
+	 * return : 입력된 filmId값
+	 * 
+	 */
+	
+	public void addFilm(FilmForm filmForm) {
+		Film film = filmForm.getFilm();
+		filmMapper.insertFilm(film); // filmId가 생성된 후 film.setFilmId(생성된 값)호출..
+		Map<String, Object> map = new HashMap<>();
+		map.put("categoryId", filmForm.getCategory().getCatogoryId());
+		map.put("filmId", film.getFilmId());
+		filmMapper.insertFilmCategory(map);
+	}
 	
 	public Map<String, Object> getFilmList(Map<String, Object> parmMap) {
 		log.debug("▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶FilmService.getFilmList 매개변수 currentPage : " + parmMap.get("currentPage"));
